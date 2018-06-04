@@ -23,9 +23,9 @@ ports_length = int(config.get('home', 'ports_length'))
 port_spread = int(config.get('home', 'port_spread'))
 username = config.get('home', 'username')
 password = config.get('home', 'password')
-longdelay = config.get('home', 'longdelay')
-shortdelay = config.get('home', 'shortdelay')
-delaylength = config.get('home', 'delaylength')
+longdelay = int(config.get('home', 'longdelay'))
+shortdelay = int(config.get('home', 'shortdelay'))
+delaylength = int(config.get('home', 'delaylength'))
 
 server_address = socket.gethostbyname(server_host)
 

@@ -10,9 +10,9 @@ configfile = '/etc/remotepi.cfg'
 config = ConfigParser()
 config.read(configfile)
 
-ssh_listeners = config.get('home', 'ports_length')
-port_start = config.get('home', 'port_start')
-port_spread = config.get('home', 'port_spread')
+ssh_listeners = int(config.get('home', 'ports_length'))
+port_start = int(config.get('home', 'starting_port'))
+port_spread = int(config.get('home', 'port_spread'))
 
 listen_ports = list(range(port_start, port_start + (ssh_listeners * port_spread), port_spread))
 remote = []
