@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3.6
 
 import sys
 import time
@@ -26,8 +26,6 @@ password = config.get('home', 'password')
 longdelay = int(config.get('home', 'longdelay'))
 shortdelay = int(config.get('home', 'shortdelay'))
 delaylength = int(config.get('home', 'delaylength'))
-
-server_address = socket.gethostbyname(server_host)
 
 server_ports = list(range(port_start, port_start + (port_spread * ports_length), port_spread))
 failcount = 0
@@ -75,17 +73,22 @@ def ssh_command(server_address, server_port, username, password):
 while True:
     for server_port in server_ports:
         try:
-            ssh_command(server_address, server_port, username, password)
-        except Exception as err:
-            #print(f'ERROR: {err}')
-            failcount += 1
-            time.sleep(30)
+            server_address = socket.gethostbyname(server_host)
+        except:
+            time.sleep(300)
         else:
-            failcount = 0
-    if failcount >= ports_length * delaylength:
-        time.sleep(longdelay*60)
-    else:
-        time.sleep(shortdelay*60)
+            try:
+                ssh_command(server_address, server_port, username, password)
+            except Exception as err:
+              #print(f'ERROR: {err}')
+                failcount += 1
+                time.sleep(30)
+            else:
+                failcount = 0
+        if failcount >= ports_length * delaylength:
+            time.sleep(longdelay*60)
+        else:
+            time.sleep(shortdelay*60)
 
 
 

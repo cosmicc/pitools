@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ae9892296d4ffe79b3753158000ffc380efc983919b30c48458262cb999d5a39"
+            "sha256": "54731b829e1269c2bd3bef5750daef6ddda4d715273462cb707d6372666c0909"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -87,7 +87,6 @@
                 "sha256:edabd457cd23a02965166026fd9bfd196f4324fe6032e866d0f3bd0301cd486f",
                 "sha256:fdf1c1dc5bafc32bc5d08b054f94d659422b05aba244d6be4ddc1c72d9aa70fb"
             ],
-            "markers": "platform_python_implementation != 'pypy'",
             "version": "==1.11.5"
         },
         "cryptography": {
@@ -177,6 +176,13 @@
                 "sha256:fabf73d5d0286f9e078774f3435601d2735c94ce9e514ac4fb945701edead7e4"
             ],
             "version": "==1.2.1"
+        },
+        "python-wifi": {
+            "hashes": [
+                "sha256:7bff6afbc03b1cb13f987e5cf3b597b8821a1b86e5b34182406d98657f1b2c91"
+            ],
+            "index": "pypi",
+            "version": "==0.6.1"
         },
         "screenutils": {
             "hashes": [

