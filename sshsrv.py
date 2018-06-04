@@ -21,5 +21,5 @@ for i in range(ssh_listeners):
     exec(f'remote{i} = Screen("remote{i}",True)')
     exec(f'remote{i}.send_commands("bash")')
     exec(f'remote{i}.enable_logs()')
-    exec(f'remote{i}.send_commands(f"python3 /opt/pitools/ssh_listener.py 127.0.0.1 {listen_ports[i]} ssh sshtester!")')
+    exec(f'remote{i}.send_commands(f"python3 /opt/pitools/ssh_listener.py 172.25.1.30 {listen_ports[i]} ssh sshtester!")')
 list_screens()

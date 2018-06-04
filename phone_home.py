@@ -4,8 +4,11 @@ import sys
 import time
 import subprocess
 from configparser import ConfigParser
+import lib.processlock as processlock
 
 import paramiko
+
+processlock.lock()
 
 configfile = '/etc/remotepi.cfg'
 
