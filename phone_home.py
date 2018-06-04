@@ -3,6 +3,7 @@
 import sys
 import time
 import subprocess
+import socket
 from configparser import ConfigParser
 
 import paramiko
@@ -13,7 +14,7 @@ configfile = '/etc/remotepi.cfg'
 config = ConfigParser()
 config.read(configfile)
 
-server_address = config.get('home', 'ip')
+server_host = config.get('home', 'host')
 port_start = int(config.get('home', 'starting_port'))
 ports_length = int(config.get('home', 'ports_length'))
 port_spread = int(config.get('home', 'port_spread'))
@@ -22,6 +23,8 @@ password = config.get('home', 'password')
 longdelay = config.get('home', 'longdelay')
 shortdelay = config.get('home', 'shortdelay')
 delaylength = config.get('home', 'delaylength')
+
+server_address = socket.gethostbyname(server_host)
 
 server_ports = list(range(port_start, port_start + (port_spread * ports_length), port_spread))
 failcount = 0
