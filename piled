@@ -1,0 +1,49 @@
+#!/usr/bin/python3
+
+from os import getenv
+import argparse
+
+import lib.onboardled as obled
+
+__author__ = "Ian Perry"
+__copyright__ = "Copyright 2018, Galaxy Media"
+__license__ = "GPL"
+__version__ = "1.0.0"
+__maintainer__ = "Ian Perry"
+__email__ = "ianperry99@gmail.com"
+__progname__ = "piled"
+__description__ = "Raspberry Pi onboard LED controller"
+__detaildesc__ = ""
+
+parser = argparse.ArgumentParser(prog=__progname__, description=__description__, epilog=__detaildesc__,
+                                 formatter_class=argparse.RawTextHelpFormatter)
+parser.add_argument('led', action='store', choices=['pwr', 'status'], help="Power LED or Status LED")
+parser.add_argument('action', action='store', choices=['on', 'off', 'flash'], help='LED ON, OFF, or FLASH')
+parser.add_argument('--version', action='version', version='%(prog)s {}'.format(__version__))
+#action_group = parser.add_argument_group(title='actions')
+#action_group.add_argument('on', action='store_true', help='Turn LED ON')
+#action_group.add_argument('off', action='store_true', help='Turn LED OFF')
+#action_group.add_argument('flash', action='store_true', help='Flashes LED')
+args = parser.parse_args()
+
+if getenv("SUDO_USER") is None:
+    print("Root is required to control the onboard LED's")
+    exit(1)
+
+obled.init()
+
+if args.led == 'pwr':
+    if args.action == 'on':
+        obled.pwr_on()
+    elif args.action == 'off':
+        obled.pwr_off()
+    elif args.action == 'flash':
+        obled.pwr_flash()
+elif args.led == 'status':
+    if args.action == 'on':
+        obled.status_on()
+    elif args.action == 'off':
+        obled.status_off()
+    elif args.action == 'flash':
+        obled.status_flash()
+

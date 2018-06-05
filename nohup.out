@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "phone_home.py", line 82, in <module>
-    if failcount >= ports_length * delaylength:
-TypeError: '>=' not supported between instances of 'int' and 'str'
