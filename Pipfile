@@ -8,6 +8,7 @@ paramiko = "*"
 screenutils = "*"
 python-wifi = "*"
 gitpython = "*"
+colorama = "*"
 
 [dev-packages]
 

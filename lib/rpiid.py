@@ -1,7 +1,6 @@
 
 import os
 from socket import gethostname
-#import colorama
 
 
 def is_rpi():
@@ -30,6 +29,9 @@ def rpi_info():
 
 
 def main():
+
+    import colorama
+
     if is_rpi():
         model = rpi_board()
         print('This IS a Raspberry Pi')
