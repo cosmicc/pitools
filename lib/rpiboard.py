@@ -1,10 +1,16 @@
-from os import uname
+from os import uname, getenv
 from socket import gethostname
 from subprocess import check_output, Popen, PIPE
 
+def is_root():
+    if getenv("SUDO_USER") == None:
+        return False
+    else:
+        return True
+
 def is_rpi():
-    uname = os.uname()
-    if uname[4][:3] == 'arm':
+    funame = uname()
+    if funame[4][:3] == 'arm':
         return True
     else:
         return False
@@ -82,47 +88,56 @@ def rpi_info():
             rpiinfo.update({'hardware':line[1].strip('\n').strip()})
         elif line[0].startswith('processor'):
             cores += 1
-
+        elif line[0].startswith('Revision'):
+            rpiinfo.update({'revision':line[1].strip('\n').strip()})
+        elif line[0].startswith('model name'):
+            rpiinfo.update({'cpu_model':line[1].strip('\n').strip()})
     cpuinfofile.close()
     rpiinfo.update({'cores':cores})
     return rpiinfo
 
-
-
-class Led(type):
-    def __init__():
-        check_output(['echo', 'none', '>', '/sys/class/leds/led0/trigger'], shell=False)
+class Led(object):
+    def __init__(self, ledtype):
+        self.ledtype = ledtype
+        if is_zero():
+            self.fon = '0'
+            self.foff = '1'
+        else:
+            self.fon = '1'
+            self.foff = '0'
+        if self.ledtype == 'status' or self.ledtype == 'st':
+            self.led = 'led0'
+        elif self.ledtype == 'power' or self.ledtype == 'pwd':
+            self.led = 'led1'
+        else:
+            raise NameError('Invalid onboard LED specified')
+        if not is_root():
+            raise RuntimeError("Controlling onboard LED's requires ROOT")
+        trig = open('/sys/class/leds/{}/trigger'.format(self.led), 'w')
+        trig.write('none')
+        trig.close()
         check_output(['modprobe', 'ledtrig_heartbeat'], shell=False)
 
-    def on():
-        check_output(['echo', '1', '>', '/sys/class/leds/led0/brightness'], shell=False)
+    def ledon(self):
+        lo = open('/sys/class/leds/{}/brightness'.format(self.led), 'w')
+        lo.write(self.fon)
+        lo.close()
 
+    def ledoff(self):
+        noop = open('/sys/class/leds/{}/trigger'.format(self.led), 'w')
+        noop.write('none')
+        noop.close()
+        loff = open('/sys/class/leds/{}/brightness'.format(self.led), 'w')
+        loff.write(self.foff)
+        loff.close()
 
-
-def status_flash():
-    check_output(['echo', 'heartbeat', '>', '/sys/class/leds/led0/trigger'], shell=False)
-
-def status_off():
-    check_output(['echo', 'none', '>', '/sys/class/leds/led0/trigger'], shell=False)
-    check_output(['echo', '0', '>', '/sys/class/leds/led0/brightness'], shell=False)
-
-def status_on():
-    check_output(['echo', '1', '>', '/sys/class/leds/led0/brightness'], shell=False)
-
-def pwr_flash():
-    check_output(['echo', 'heartbeat', '>', '/sys/class/leds/led1/trigger'], shell=False)
-
-def pwr_off():
-    check_output(['echo', 'none', '>', '/sys/class/leds/led1/trigger'], shell=False)
-    check_output(['echo', '0', '>', '/sys/class/leds/led1/brightness'], shell=False)
-
-def pwr_on():
-    check_output(['echo', '1', '>', '/sys/class/leds/led1/brightness'], shell=False)
+    def ledflash(self):
+        fla = open('/sys/class/leds/{}/trigger'.format(self.led), 'w')
+        fla.write('heartbeat')
+        fla.close()
 
 def cpu_temp():
     tempu = check_output(['cat', '/sys/class/thermal/thermal_zone0/temp'], shell=False)
     cel = float(tempu)/1000
     feri = cel * 1.8 + 32
     return feri // 0.1 / 10
-
-print(is_zero())

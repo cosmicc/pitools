@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+
+import lib.rpiboard as rpi
+import colorama
+
+def main():
+    if rpi.is_rpi():
+        model = rpi.rpi_board()
+        print('This IS a Raspberry Pi')
+        print('RPi Board: ',model)
+    else:
+        print('This is NOT a Raspberry Pi')
+
+    uname = rpi.rpi_info()
+    print('Serial #: ',uname['serial'])
+    print('Machine: ',uname['machine'])
+    print('Hardware: ',uname['hardware'])
+    print('CPU Model: ',uname['cpu_model'])
+    print('CPU Cores: ',uname['cores'])
+    print('Hostname: ',uname['hostname'])
+    print('Sysname: ',uname['system'])
+    print('Release: ',uname['release'])
+    print('Version: ',uname['version'])
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+
