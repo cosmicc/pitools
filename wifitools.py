@@ -106,7 +106,7 @@ def parse_cell(cell):
     return parsed_cell
 
 def print_table(table):
-    widths=map(max,map(lambda l:map(len,l),zip(*table))) #functional magic
+    widths=list(map(max,[list(map(len,l)) for l in zip(*table)])) #functional magic
 
     justified_table = []
     for line in table:
@@ -117,7 +117,7 @@ def print_table(table):
     
     for line in justified_table:
         for el in line:
-            print(el),
+            print((el), end=' ')
         print()
 
 def print_cells(cells):
