@@ -1,26 +1,40 @@
 #!/usr/bin/env python
 
 import lib.rpiboard as rpi
-import colorama
+from colorama import Fore
+
+CYN = Fore.CYAN
+RED = Fore.RED
+YEL = Fore.YELLOW
+GRN = Fore.GREEN
+RST = Fore.RESET
 
 def main():
+    print(' ')
     if rpi.is_rpi():
         model = rpi.rpi_board()
-        print('This IS a Raspberry Pi')
-        print('RPi Board: ',model)
+        print(f'{GRN}This IS a Raspberry Pi{RST}')
+        print(' ')
+        print(f'{CYN}RPi Board: {YEL}{model}{RST}')
     else:
-        print('This is NOT a Raspberry Pi')
+        print(f'{RED}This is NOT a Raspberry Pi{RST}')
+        print(' ')
 
     uname = rpi.rpi_info()
-    print('Serial #: ',uname['serial'])
-    print('Machine: ',uname['machine'])
-    print('Hardware: ',uname['hardware'])
-    print('CPU Model: ',uname['cpu_model'])
-    print('CPU Cores: ',uname['cores'])
-    print('Hostname: ',uname['hostname'])
-    print('Sysname: ',uname['system'])
-    print('Release: ',uname['release'])
-    print('Version: ',uname['version'])
+    dsp = rpi.get_diskspace()
+    mem = rpi.get_freemem()
+    print(f'{CYN}Serial #: {YEL}{uname["serial"]}{RST}')
+    print(f'{CYN}Machine: {YEL}{uname["machine"]}{RST}')
+    print(f'{CYN}Hardware: {YEL}{uname["hardware"]}{RST}')
+    print(f'{CYN}CPU Model: {YEL}{uname["cpu_model"]}{RST}')
+    print(f'{CYN}CPU Cores: {YEL}{uname["cores"]}{RST}')
+    print(f'{CYN}System Memory: {YEL}{mem["total"]}{RST}')
+    print(f'{CYN}Hostname: {YEL}{uname["hostname"]}{RST}')
+    print(f'{CYN}Flash Size: {YEL}{dsp["size"]}{RST}')
+    print(f'{CYN}Sysname: {YEL}{uname["system"]}{RST}')
+    print(f'{CYN}Release: {YEL}{uname["release"]}{RST}')
+    print(f'{CYN}Version: {YEL}{uname["version"]}{RST}')
+    print(' ')
 
 if __name__ == '__main__':
     main()

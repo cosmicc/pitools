@@ -21,6 +21,13 @@ def is_zero():
     else:
         return False
 
+def rpi_mem():
+    memory = {}
+    armmem = check_output(['/usr/bin/vcgencmd', 'get_mem', 'arm'], shell=False)
+    gpumem = check_output(['/usr/bin/vcgencmd', 'get_mem', 'gpu'], shell=False)
+    memory.update({'system':armmem, 'gpu':gpumem})
+    return memory
+
 def rpi_board():
     try:
         file = open('/sys/firmware/devicetree/base/model', 'r')
