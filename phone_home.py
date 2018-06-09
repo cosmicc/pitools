@@ -7,6 +7,7 @@ import socket
 from configparser import ConfigParser
 import lib.processlock as processlock
 
+import lib.rpiboard as rpi
 import paramiko
 
 processlock.lock()
@@ -47,6 +48,7 @@ def ssh_command(server_address, server_port, username, password):
     #get ssh session
     client_session = client.get_transport().open_session()
     if client_session.active and not client_session.closed:
+        stled.ledoff()
         #wait for command, execute and send result ouput
         while True:
             #use subprocess run with timeout of 30 seconds
@@ -70,6 +72,8 @@ def ssh_command(server_address, server_port, username, password):
     client_session.close()
     return
 
+stled = rpi.Led('status')
+
 while True:
     for server_port in server_ports:
         try:
@@ -82,13 +86,15 @@ while True:
             except Exception as err:
               #print(f'ERROR: {err}')
                 failcount += 1
+                stled.ledflash()
                 time.sleep(30)
             else:
+                stled.ledflash()
                 failcount = 0
         if failcount >= ports_length * delaylength:
             time.sleep(longdelay*60)
         else:
-            time.sleep(shortdelay*60)
+            time.sleep(3)
 
 
 

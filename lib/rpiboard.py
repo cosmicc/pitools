@@ -118,8 +118,8 @@ class Led(object):
             self.led = 'led1'
         else:
             raise NameError('Invalid onboard LED specified')
-        if not is_root():
-            raise RuntimeError("Controlling onboard LED's requires ROOT")
+        #if not is_root():
+        #    raise RuntimeError("Controlling onboard LED's requires ROOT")
         trig = open('/sys/class/leds/{}/trigger'.format(self.led), 'w')
         trig.write('none')
         trig.close()
