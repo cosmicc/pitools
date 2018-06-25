@@ -95,8 +95,3 @@ while True:
             time.sleep(longdelay*60)
         else:
             time.sleep(3)
-
-
-
-
-

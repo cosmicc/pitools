@@ -38,16 +38,16 @@ def lock():
         return True
     else:
         # do pid checking
-        log.warning('Process is locked. Another instance is running. Retrying every 5 seconds until timeout')
-        time.sleep(5)
-    for numtries in range(1):
-        if aquireLock():
-            lock_handle.write(ppid)
-            atexit.register(unlock)
-            return True
-        else:
-            time.sleep(5)
-    log.error('Could not obtain process lock after 60 seconds. Exiting')
+        log.warning('Process is locked. Another instance is running.')
+#        time.sleep(5)
+#    for numtries in range(1):
+#        if aquireLock():
+#            lock_handle.write(ppid)
+#            atexit.register(unlock)
+#            return True
+#        else:
+#            time.sleep(5)
+    log.error('Could not obtain process lock. Exiting')
     exit(1)
 
 

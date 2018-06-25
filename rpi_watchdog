@@ -1,10 +1,14 @@
 #!/usr/bin/python3
 
+import lib.processlock as processlock
+processlock.lock()
+
 from os import system
 import wpa_supplicant.core
 from twisted.internet.selectreactor import SelectReactor
 import threading
 import time
+import socket
 import subprocess
 import logging
 import argparse
@@ -88,7 +92,8 @@ def host_port(ip, port):
     try:
         s.connect((ip, port))
         s.shutdown(2)
-    except:
+    except Exception as err:
+        print(err)
         return False
     else:
         return True
@@ -107,28 +112,30 @@ def run_gpsd():
     subprocess.Popen(['/usr/sbin/gpsd', config.get('gps', 'port')], shell=False)
 
 def main():
-    log.DEBUG('Script is starting')
+    log.debug('Script is starting')
     stled = rpi.Led('status')
     stled.ledon()
-    log.DEBUG('killing all wpa_supplicant processes')
+    log.debug('killing all wpa_supplicant processes')
     kill_wpasup()
     if config.get('gps', 'installed'):
-        log.DEBUG('GPS is installed. starting gpsd')
+        log.debug('GPS is installed. starting gpsd')
         run_gpsd()
     else:
-        log.DEBUG('GPS set to not installed in config file')
-    log.DEBUG('starting WiFi instance')
+        log.debug('GPS set to not installed in config file')
+    log.debug('starting WiFi instance')
     wifi = WiFi()
     while True:
         if not isup_internet():
-            log.WARNING('internet DOWN detected')
-            log.INFO('trying saved wireless networks')
+            log.warning('internet DOWN detected')
+            log.info('trying saved wireless networks')
             if wifi.connect_against_saved():
-                log.INFO('saved wireless networks connection successful')
-                if ifup_internet():
-                    log.INFO('internet is now UP')
+                log.info('saved wireless networks connection successful')
+                log.debug('pausing befor internet connection test')
+                time.sleep(10)
+                if isup_internet():
+                    log.info('internet is now UP')
                     stled.ledflash()
-                    log.DEBUG('sleeping...')
+                    log.debug('sleeping...')
                     time.sleep(300)
                 else:
                     time.sleep(3)
@@ -136,7 +143,7 @@ def main():
             time.sleep(60)
     if config.get('gps', 'installed'):
         if not isup_gpsd():
-            log.WARNING('gpsd not running. restarting.')
+            log.warning('gpsd not running. restarting.')
             run_gpsd()
 
 if __name__ == "__main__":
