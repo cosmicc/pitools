@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo dd bs=4096 status=progress if=/dev/sdb of=/mnt/storage/files/raspian/$1
+
+sudo gzip -9 -v /mnt/storage/files/raspian/$1
