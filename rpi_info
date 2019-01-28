@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.7m
 
-import lib.rpiboard as rpi
+import modules.rpiboard as rpi
 from colorama import Fore
 
 CYN = Fore.CYAN
@@ -23,18 +23,36 @@ def main():
     uname = rpi.rpi_info()
     dsp = rpi.get_diskspace()
     mem = rpi.get_freemem()
+    swap = rpi.get_swap()
+    cputemp = rpi.cpu_temp()
+    uptime = rpi.system_uptime()
+    rpimem = rpi.rpi_mem()
+    ipaddr = rpi.get_ip_address()
+    load = rpi.get_load()
+    cpuspeed = rpi.get_cpuspeed()
+    throttle = rpi.get_throttled()
     print(f'{CYN}Serial #: {YEL}{uname["serial"]}{RST}')
     print(f'{CYN}Machine: {YEL}{uname["machine"]}{RST}')
     print(f'{CYN}Hardware: {YEL}{uname["hardware"]}{RST}')
     print(f'{CYN}CPU Model: {YEL}{uname["cpu_model"]}{RST}')
     print(f'{CYN}CPU Cores: {YEL}{uname["cores"]}{RST}')
+    print(f'{CYN}CPU Speed: {YEL}{cpuspeed}{RST}')
+    print(f'{CYN}CPU Throttled: {YEL}{throttle}{RST}')
+    print(f'{CYN}CPU Load: {YEL}{load}{RST}')
+    print(f'{CYN}CPU Temp: {YEL}{cputemp}{RST}')
     print(f'{CYN}System Memory: {YEL}{mem["total"]}{RST}')
-    print(f'{CYN}Hostname: {YEL}{uname["hostname"]}{RST}')
-    print(f'{CYN}Flash Size: {YEL}{dsp["size"]}{RST}')
+    #print(f'{CYN}Hostname: {YEL}{uname["hostname"]}{RST}')
+    print(f'{CYN}Total Memory: {YEL}{rpimem}{RST}')
+    print(f'{CYN}Free Memory: {YEL}{mem}{RST}')
+    print(f'{CYN}Swap: {YEL}{swap}{RST}')
+    print(f'{CYN}Uptime: {YEL}{uptime}{RST}')
+    print(f'{CYN}Root Size: {YEL}{dsp["size"]}{RST}')
     print(f'{CYN}Sysname: {YEL}{uname["system"]}{RST}')
     print(f'{CYN}Release: {YEL}{uname["release"]}{RST}')
     print(f'{CYN}Version: {YEL}{uname["version"]}{RST}')
+    print(f'{CYN}IP Address: {YEL}{ipaddr}{RST}')
     print(' ')
+    print(rpi.get_bluetooth_info())
 
 if __name__ == '__main__':
     main()

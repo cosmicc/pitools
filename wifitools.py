@@ -154,4 +154,5 @@ def main():
 
     print_cells(parsed_cells)
 
-main()
+if __name__ == '__main__':
+    main()

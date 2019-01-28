@@ -1,0 +1,8 @@
+#!/usr/local/bin/python3.7m
+
+import modules.rpiboard as rpiboard
+
+wifi = rpiboard.get_wifi_info()
+
+for key, value in wifi.items():
+    print(f'{key} - {value}')
