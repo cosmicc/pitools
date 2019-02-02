@@ -35,7 +35,11 @@ def is_zero():
 
 
 def get_ip_address():
-    return ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
+    try:
+        a = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
+    except:
+        a = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
+    return a
 
 
 def rpi_mem():

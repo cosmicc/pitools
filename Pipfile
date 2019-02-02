@@ -9,6 +9,8 @@ screenutils = "*"
 python-wifi = "*"
 gitpython = "*"
 colorama = "*"
+wpa-supplicant = "*"
+paho-mqtt = "*"
 
 [dev-packages]
 
